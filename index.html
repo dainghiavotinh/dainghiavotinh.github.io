@@ -55,10 +55,13 @@
         var count;
         var threshold;
         var result = [];
+        const audio = new Audio("./sound.mp3");
+  
         $("#start-btn").on("click", function(){
           count = 1;
           threshold = Math.floor(Math.random() * 10) + 10
           $("#start-btn").attr("disabled", "disabled");
+          audio.play();
           guess();
         });
         $("#reset-btn").on("click", function(){
@@ -74,7 +77,7 @@
             setTimeout(guess, 500);
           } else {
             storeNumber(number);
-
+            audio.pause();
             if(!isFinished()) {
               $("#start-btn").removeAttr("disabled");
             } else {
