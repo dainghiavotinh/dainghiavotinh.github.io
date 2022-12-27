@@ -1,16 +1,30 @@
 <html>
     <head>
-        <title>Vòng quay may mắn</title>
-        <link rel="stylesheet" href="main.css" type="text/css" />
-        <script type="text/javascript" src="Winwheel.min.js"></script>
-        <script type="text/javascript" src="TweenMax.min.js"></script>
+      <meta charset="UTF-8" />
+      <link rel="manifest" href="manifest.json" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-72x72.png" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-96x96.png" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-128x128.png" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-144x144.png" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-152x152.png" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-192x192.png" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-384x384.png" />
+      <link rel="apple-touch-icon" href="images/icons/spinning-wheel-512x512.png" />
+      <meta name="apple-mobile-web-app-status-bar" content="#db4938" />
+      <meta name="theme-color" content="#db4938" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+      <title>Vòng quay may mắn</title>
+      <link rel="stylesheet" href="main.css" type="text/css" />
+      <script type="text/javascript" src="Winwheel.min.js"></script>
+      <script type="text/javascript" src="TweenMax.min.js"></script>
     </head>
     <body>
         <div align="center">
           <table cellpadding="0" cellspacing="0" border="0">
               <tr>
-                  <td width="700" height="800" class="the_wheel" valign="center">
-                      <canvas id="canvas" width="700" height="700">
+                  <td width="351" height="450" class="the_wheel" valign="center">
+                      <canvas id="canvas" width="350" height="350">
                       </canvas>
                   </td>
               </tr>
@@ -23,8 +37,8 @@
             // Create new wheel object specifying the parameters at creation time.
             var theWheel = new Winwheel({
                 'numSegments'  : 10,     // Specify number of segments.
-                'outerRadius'  : 350,   // Set outer radius so wheel fits inside the background.
-                'textFontSize' : 18,    // Set font size as desired.
+                'outerRadius'  : 170,   // Set outer radius so wheel fits inside the background.
+                'textFontSize' : 12,    // Set font size as desired.
                 'segments'     :        // Define segments including colour and text.
                 [
                    {'fillStyle' : 'lightgray', 'text' : 'Chúc bạn may mắn'},
