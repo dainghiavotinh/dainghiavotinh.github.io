@@ -1,111 +1,105 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title>So hoc tinh hoa</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <style>
-      .number {
-        width: 40px;
-        line-height: 30px;
-        border-radius: 20px;
-        margin-left: 5px;
-        margin-bottom: 5px;
-        font-size: 15px;
-      }
-      .active {
-        background-color: goldenrod !important;
-      }
-    </style>
-  </head>
-  <body>
-    <br/>
-    <br/>
-    <h1 class="text-center">SỐ HỌC TINH HOA</h1>
-    <br/>
-    <div class="container" >
-      <div class="row">
-        <div id="main" class="col-12 col-sm-12 col-lg-8 text-center">
-
+    <head>
+        <title>Vòng quay may mắn</title>
+        <link rel="stylesheet" href="main.css" type="text/css" />
+        <script type="text/javascript" src="Winwheel.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    </head>
+    <body>
+        <div align="center">
+          <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                  <td width="438" height="582" class="the_wheel" valign="center">
+                      <canvas id="canvas" width="434" height="434">
+                      </canvas>
+                  </td>
+              </tr>
+          </table>
         </div>
-        <div class="col-12 col-sm-12 col-lg-4 result-container">
-          <button id="start-btn" class="btn btn-warning">Start</button>
-          <button id="reset-btn" class="btn">Reset</button>
-          <br/><br/>
-          <div id="result" class="text-left">
-            
-          </div>
+        <div align="center">
+            <img id="spin_button" src="spin_on.png" alt="Spin" onClick="startSpin();" class="clickable" />
         </div>
-      </div>
-      
-    </div>
-    <script>
-      $(function(){
-        for (let number = 1; number <= 45; number++) {
-          var tag = $("<span class='badge bg-info'></span>").text(number);
-          tag.addClass("number number-" + number);
-          $("#main").append(tag);
-          if(number % 6 == 0) {
-            $("#main").append("<br/>")
-          }
-        }
+        <script>
+            // Create new wheel object specifying the parameters at creation time.
+            var theWheel = new Winwheel({
+                'numSegments'  : 10,     // Specify number of segments.
+                'outerRadius'  : 212,   // Set outer radius so wheel fits inside the background.
+                'textFontSize' : 18,    // Set font size as desired.
+                'segments'     :        // Define segments including colour and text.
+                [
+                   {'fillStyle' : 'lightgray', 'text' : 'Chúc bạn may mắn'},
+                   {'fillStyle' : 'yellow', 'text' : 'Vinfast President'},
+                   {'fillStyle' : 'lightgray', 'text' : 'Chúc bạn may mắn'},
+                   {'fillStyle' : 'yellow', 'text' : 'Iphone 14 Pro Max'},
+                   {'fillStyle' : 'lightgray', 'text' : 'Chúc bạn may mắn'},
+                   {'fillStyle' : 'yellow', 'text' : 'Macbook Pro M2 2022'},
+                   {'fillStyle' : 'lightgray', 'text' : 'Chúc bạn may mắn'},
+                   {'fillStyle' : 'yellow', 'text' : 'Bim bim'},
+                   {'fillStyle' : 'lightgray', 'text' : 'Chúc bạn may mắn'},
+                   {'fillStyle' : 'yellow', 'text' : 'Cafe Highland'}
+                ],
+                'animation' :           // Specify the animation to use.
+                {
+                    'type'     : 'spinToStop',
+                    'duration' : 5,     // Duration in seconds.
+                    'spins'    : 8,     // Number of complete spins.
+                    'callbackFinished' : alertPrize
+                }
+            });
 
-        var number;
-        var count;
-        var threshold;
-        var result = [];
-        const audio = new Audio("./sound.mp3");
+            // Vars used by the code in this page to do power controls.
+            var wheelPower    = 3;
+            var wheelSpinning = false;
+            const audio = new Audio("./sound.mp3");
   
-        $("#start-btn").on("click", function(){
-          count = 1;
-          threshold = Math.floor(Math.random() * 10) + 10
-          $("#start-btn").attr("disabled", "disabled");
-          audio.play();
-          guess();
-        });
-        $("#reset-btn").on("click", function(){
-          reset();
-        });
+            // -------------------------------------------------------
+            // Click handler for spin button.
+            // -------------------------------------------------------
+            function startSpin()
+            {
+                resetWheel();
 
-        var guess = function(){
-          count += 1
-          if (count <= threshold) {
-            number = Math.floor(Math.random() * 45);
-            $("#main .number").removeClass("active");
-            $("#main .number-" + number).addClass("active");
-            setTimeout(guess, 500);
-          } else {
-            storeNumber(number);
-            audio.pause();
-            if(!isFinished()) {
-              $("#start-btn").removeAttr("disabled");
-            } else {
-              console.log(result);
+                if (wheelSpinning == false)
+                {
+                    theWheel.animation.spins = 15;
+
+                    document.getElementById('spin_button').src       = "spin_off.png";
+                    document.getElementById('spin_button').className = "";
+
+                    let results = [
+                        18,
+                        36 * 3 - 18,
+                        36 * 5 - 18,
+                        36 * 7 - 18,
+                        36 * 9 - 18
+                    ]
+                    let stopAt = results[Math.floor((Math.random() * 5))]
+                    theWheel.animation.stopAngle = 18;
+                    audio.play();
+                    theWheel.startAnimation();
+                    wheelSpinning = true;
+                }
             }
-          }
-        }
 
-        var storeNumber = function(number) {
-          result.push(number);
-          var tag = $("<span class='badge bg-warning'></span>").text(number);
-          tag.addClass("number number-" + number);
-          $("#result").append(tag);
-        };
+            // -------------------------------------------------------
+            // Function for reset button.
+            // -------------------------------------------------------
+            function resetWheel()
+            {
+                theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+                theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+                theWheel.draw();                // Call draw to render changes to the wheel.
 
-        var isFinished = function() {
-          return result.length >= 6;
-        }
+                wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+            }
 
-        var reset = function(){
-          $("#start-btn").removeAttr("disabled");
-          $("#main .number").removeClass("active");
-          $("#result").html("");
-          result = [];
-        }
-        
-      });
-    </script>
-  </body>
+            function alertPrize(indicatedSegment)
+            {
+                wheelSpinning = false;
+                audio.pause();
+                document.getElementById('spin_button').src       = "spin_on.png";
+                document.getElementById('spin_button').className = "clickable";
+            }
+        </script>
+    </body>
 </html>

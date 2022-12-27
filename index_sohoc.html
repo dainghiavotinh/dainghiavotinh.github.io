@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>So hoc tinh hoa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <style>
+      .number {
+        width: 40px;
+        line-height: 30px;
+        border-radius: 20px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        font-size: 15px;
+      }
+      .active {
+        background-color: goldenrod !important;
+      }
+    </style>
+  </head>
+  <body>
+    <br/>
+    <br/>
+    <h1 class="text-center">SỐ HỌC TINH HOA</h1>
+    <br/>
+    <div class="container" >
+      <div class="row">
+        <div id="main" class="col-12 col-sm-12 col-lg-8 text-center">
+
+        </div>
+        <div class="col-12 col-sm-12 col-lg-4 result-container">
+          <button id="start-btn" class="btn btn-warning">Start</button>
+          <button id="reset-btn" class="btn">Reset</button>
+          <br/><br/>
+          <div id="result" class="text-left">
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <script>
+      $(function(){
+        for (let number = 1; number <= 45; number++) {
+          var tag = $("<span class='badge bg-info'></span>").text(number);
+          tag.addClass("number number-" + number);
+          $("#main").append(tag);
+          if(number % 6 == 0) {
+            $("#main").append("<br/>")
+          }
+        }
+
+        var number;
+        var count;
+        var threshold;
+        var result = [];
+        const audio = new Audio("./sound.mp3");
+  
+        $("#start-btn").on("click", function(){
+          count = 1;
+          threshold = Math.floor(Math.random() * 10) + 10
+          $("#start-btn").attr("disabled", "disabled");
+          audio.play();
+          guess();
+        });
+        $("#reset-btn").on("click", function(){
+          reset();
+        });
+
+        var guess = function(){
+          count += 1
+          if (count <= threshold) {
+            number = Math.floor(Math.random() * 45);
+            $("#main .number").removeClass("active");
+            $("#main .number-" + number).addClass("active");
+            setTimeout(guess, 500);
+          } else {
+            storeNumber(number);
+            audio.pause();
+            if(!isFinished()) {
+              $("#start-btn").removeAttr("disabled");
+            } else {
+              console.log(result);
+            }
+          }
+        }
+
+        var storeNumber = function(number) {
+          result.push(number);
+          var tag = $("<span class='badge bg-warning'></span>").text(number);
+          tag.addClass("number number-" + number);
+          $("#result").append(tag);
+        };
+
+        var isFinished = function() {
+          return result.length >= 6;
+        }
+
+        var reset = function(){
+          $("#start-btn").removeAttr("disabled");
+          $("#main .number").removeClass("active");
+          $("#result").html("");
+          result = [];
+        }
+        
+      });
+    </script>
+  </body>
+</html>
