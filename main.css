@@ -9,6 +9,7 @@ body
     background-image: url(./wheel_back.png);
     background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 /* Do some css reset on selected elements */
